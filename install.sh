@@ -3522,7 +3522,7 @@ except: print('$BOT|未知')
                     sleep 2
                     ;;
                 3) _configure_personality "$bot_dir" ;;
-                4) _configure_api "$bot_dir" ;;
+                4) change_brain ;;
                 t|T)
                     _configure_docker_mode "$bot_dir" "$bot_name" "stopped"
                     ;;
@@ -3577,7 +3577,7 @@ echo -e "  s)  ⏹  停止秘书"
                         _configure_personality "$bot_dir"
                         ;;
                     4)
-                        _configure_api "$bot_dir"
+                        change_brain
                         ;;
                     d|D)
                         echo -e "\n  ${RED}⚠️ 警告：确定要辞退并删除秘书 [${bot_name}] 吗？(y/n)${NC}"
