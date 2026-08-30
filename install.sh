@@ -3522,8 +3522,8 @@ except: print('$BOT|未知')
                     echo -e "  ${GREEN}✅ 启动指令已发送！${NC}"
                     sleep 2
                     ;;
-                3) _configure_personality "$bot_dir" ;;
-                4) _configure_api "$bot_dir" ;;
+                3) modify_prompt_direct "$bot_name" ;;
+                4) change_brain_direct "$bot_name" ;;
                 t|T)
                     _configure_docker_mode "$bot_dir" "$bot_name" "stopped"
                     ;;
@@ -3575,10 +3575,10 @@ echo -e "  s)  ⏹  停止秘书"
                         _configure_docker_mode "$bot_dir" "$bot_name" "running"
                         ;;
                     3)
-                        _configure_personality "$bot_dir"
+                        modify_prompt_direct "$bot_name"
                         ;;
                     4)
-                        _configure_api "$bot_dir"
+                        change_brain_direct "$bot_name"
                         ;;
                     d|D)
                         echo -e "\n  ${RED}⚠️ 警告：确定要辞退并删除秘书 [${bot_name}] 吗？(y/n)${NC}"
