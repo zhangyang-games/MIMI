@@ -806,21 +806,21 @@ _select_engine() {
     case "$ENGINE_CHOICE" in
         1)  # Google Gemini
             read -p "Gemini API Key (👉 aistudio.google.com/apikey): " API_KEY
-            echo "  a) gemini-2.5-flash（最新旗舰，推荐）  b) gemini-2.0-flash（均衡快速）  c) gemini-1.5-flash（稳定老版）"
+            echo "  a) gemini-3.7-flash（最新旗舰，推荐）  b) gemini-2.5-flash-lite（最便宜，免费额度友好）  c) gemini-3.1-pro（最强推理）"
             read -p "选择型号 (a/b/c，默认 a): " G_VER
-            if   [ "$G_VER" == "c" ]; then MODEL_NAME="gemini-1.5-flash"
-            elif [ "$G_VER" == "b" ]; then MODEL_NAME="gemini-2.0-flash"
-            else MODEL_NAME="gemini-2.5-flash-preview-05-20"; fi
+            if   [ "$G_VER" == "c" ]; then MODEL_NAME="gemini-3.1-pro"
+            elif [ "$G_VER" == "b" ]; then MODEL_NAME="gemini-2.5-flash-lite"
+            else MODEL_NAME="gemini-3.7-flash"; fi
             PROVIDER="google" ;;
         2)  # Groq
             echo -e "  ${DIM}注册地址：https://console.groq.com  → API Keys → Create${NC}"
             read -p "Groq API Key: " API_KEY
             API_BASE="https://api.groq.com/openai/v1"
-            echo "  a) llama-3.3-70b（最强）  b) qwen-qwq-32b（推理强）  c) gemma2-9b（轻量快）"
+            echo "  a) gpt-oss-120b（最强，推荐）  b) llama-3.3-70b（老牌均衡）  c) gpt-oss-20b（轻量快）"
             read -p "选择型号 (a/b/c，默认 a): " G_VER
-            if   [ "$G_VER" == "c" ]; then MODEL_NAME="gemma2-9b-it"
-            elif [ "$G_VER" == "b" ]; then MODEL_NAME="qwen-qwq-32b"
-            else MODEL_NAME="llama-3.3-70b-versatile"; fi
+            if   [ "$G_VER" == "c" ]; then MODEL_NAME="openai/gpt-oss-20b"
+            elif [ "$G_VER" == "b" ]; then MODEL_NAME="llama-3.3-70b-versatile"
+            else MODEL_NAME="openai/gpt-oss-120b"; fi
             PROVIDER="openai"
             ask_tavily; TAVILY_ASKED=true ;;
         3)  # OpenRouter
@@ -828,11 +828,12 @@ _select_engine() {
             echo -e "  ${DIM}免费模型一览：https://openrouter.ai/models?q=free${NC}"
             read -p "OpenRouter API Key: " API_KEY
             API_BASE="https://openrouter.ai/api/v1"
-            echo "  a) meta-llama/llama-3.3-70b（免费）  b) deepseek/deepseek-r1（免费）  c) 手动输入"
-            read -p "选择型号 (a/b/c，默认 a): " G_VER
-            if   [ "$G_VER" == "b" ]; then MODEL_NAME="deepseek/deepseek-r1:free"
-            elif [ "$G_VER" == "c" ]; then read -p "输入模型名: " MODEL_NAME
-            else MODEL_NAME="meta-llama/llama-3.3-70b-instruct:free"; fi
+            echo "  a) openrouter/free（自动选可用免费模型，最稳，推荐）  b) 手动输入模型名"
+            read -p "选择型号 (a/b，默认 a): " G_VER
+            if   [ "$G_VER" == "b" ]; then
+                echo -e "  ${DIM}当前免费模型一览：https://openrouter.ai/models?q=free${NC}"
+                read -p "输入模型名 (需带 :free 后缀): " MODEL_NAME
+            else MODEL_NAME="openrouter/free"; fi
             PROVIDER="openai"
             ask_tavily; TAVILY_ASKED=true ;;
         4)  # Cloudflare AI
@@ -840,41 +841,41 @@ _select_engine() {
             read -p "Cloudflare Account ID: " CF_ACCOUNT_ID
             read -p "Cloudflare API Token: " API_KEY
             API_BASE="https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/ai/v1"
-            echo "  a) llama-3.1-70b（推荐）  b) qwen1.5-14b  c) 手动输入"
+            echo "  a) llama-3.3-70b（推荐，速度快）  b) gpt-oss-120b（推理强）  c) 手动输入"
             read -p "选择型号 (a/b/c，默认 a): " G_VER
-            if   [ "$G_VER" == "b" ]; then MODEL_NAME="@cf/qwen/qwen1.5-14b-chat-awq"
+            if   [ "$G_VER" == "b" ]; then MODEL_NAME="@cf/openai/gpt-oss-120b"
             elif [ "$G_VER" == "c" ]; then read -p "输入模型名: " MODEL_NAME
-            else MODEL_NAME="@cf/meta/llama-3.1-70b-instruct"; fi
+            else MODEL_NAME="@cf/meta/llama-3.3-70b-instruct-fp8-fast"; fi
             PROVIDER="openai"
             ask_tavily; TAVILY_ASKED=true ;;
         5)  # Claude
             read -p "Claude API Key (👉 console.anthropic.com): " API_KEY
-            echo "  a) Haiku 4.5（最快最便宜）  b) Sonnet 4.6（均衡）  c) Opus 4.6（最强）"
+            echo "  a) Haiku 4.5（最快最便宜）  b) Sonnet 5（均衡，推荐）  c) Opus 5（最强）"
             read -p "选择型号 (a/b/c，默认 a): " C_VER
-            if   [ "$C_VER" == "c" ]; then MODEL_NAME="claude-opus-4-6"
-            elif [ "$C_VER" == "b" ]; then MODEL_NAME="claude-sonnet-4-6"
-            else MODEL_NAME="claude-haiku-4-5"; fi
+            if   [ "$C_VER" == "c" ]; then MODEL_NAME="claude-opus-5"
+            elif [ "$C_VER" == "b" ]; then MODEL_NAME="claude-sonnet-5"
+            else MODEL_NAME="claude-haiku-4-5-20251001"; fi
             PROVIDER="anthropic"
             ask_tavily; TAVILY_ASKED=true ;;
         6)  # Mistral
             echo -e "  ${DIM}注册地址：https://console.mistral.ai  → API Keys${NC}"
             read -p "Mistral API Key: " API_KEY
             API_BASE="https://api.mistral.ai/v1"
-            echo "  a) mistral-large（最强）  b) mistral-small（便宜）  c) open-mistral-nemo（免费）"
-            read -p "选择型号 (a/b/c，默认 c): " G_VER
+            echo "  a) mistral-large（最强）  b) mistral-small（便宜好用，推荐）  c) ministral-8b（轻量）"
+            read -p "选择型号 (a/b/c，默认 b): " G_VER
             if   [ "$G_VER" == "a" ]; then MODEL_NAME="mistral-large-latest"
-            elif [ "$G_VER" == "b" ]; then MODEL_NAME="mistral-small-latest"
-            else MODEL_NAME="open-mistral-nemo"; fi
+            elif [ "$G_VER" == "c" ]; then MODEL_NAME="ministral-8b-latest"
+            else MODEL_NAME="mistral-small-latest"; fi
             PROVIDER="openai"
             ask_tavily; TAVILY_ASKED=true ;;
         7)  # DeepSeek
             echo -e "  ${DIM}注册地址：https://platform.deepseek.com  → API Keys${NC}"
             read -p "DeepSeek API Key: " API_KEY
             API_BASE="https://api.deepseek.com/v1"
-            echo "  a) deepseek-chat（V3，性价比极高）  b) deepseek-reasoner（R1，推理强）"
+            echo "  a) deepseek-v4-flash（性价比极高，推荐）  b) deepseek-v4-pro（推理强，1M上下文）"
             read -p "选择型号 (a/b，默认 a): " G_VER
-            if [ "$G_VER" == "b" ]; then MODEL_NAME="deepseek-reasoner"
-            else MODEL_NAME="deepseek-chat"; fi
+            if [ "$G_VER" == "b" ]; then MODEL_NAME="deepseek-v4-pro"
+            else MODEL_NAME="deepseek-v4-flash"; fi
             PROVIDER="openai"
             ask_tavily; TAVILY_ASKED=true ;;
         8)  # 本地 Ollama
@@ -3522,7 +3523,7 @@ except: print('$BOT|未知')
                     sleep 2
                     ;;
                 3) _configure_personality "$bot_dir" ;;
-                4) change_brain ;;
+                4) _configure_api "$bot_dir" ;;
                 t|T)
                     _configure_docker_mode "$bot_dir" "$bot_name" "stopped"
                     ;;
@@ -3577,7 +3578,7 @@ echo -e "  s)  ⏹  停止秘书"
                         _configure_personality "$bot_dir"
                         ;;
                     4)
-                        change_brain
+                        _configure_api "$bot_dir"
                         ;;
                     d|D)
                         echo -e "\n  ${RED}⚠️ 警告：确定要辞退并删除秘书 [${bot_name}] 吗？(y/n)${NC}"
